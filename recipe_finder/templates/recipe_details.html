@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ recipe.title }} Details</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f8f8f8;
+            margin: 20px;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        .recipe-details {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        img {
+            max-width: 100%;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        p {
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        ul,
+        ol {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>{{ recipe.title }} Details</h2>
+    <div class="recipe-details">
+        {% if recipe.image %}
+        <img src="{{ recipe.image }}" alt="{{ recipe.title }}">
+        {% endif %}
+        <p>{{ recipe.summary | safe }}</p>
+
+        {% if recipe.extendedIngredients %}
+        <p><strong>Ingredients:</strong></p>
+        <ul>
+            {% for ingredient in recipe.extendedIngredients %}
+            <li>{{ ingredient.amount }} {{ ingredient.measures.us.unitLong }} {{ ingredient.name }}</li>
+            {% endfor %}
+        </ul>
+        {% endif %}
+
+        {% if recipe.instructions %}
+        <p><strong>Instructions:</strong></p>
+        <p>{{ recipe.instructions }}</p>
+        {% endif %}
+
+        <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
+        <p><strong>Servings:</strong> {{ recipe.servings }}</p>
+    </div>
+
+</body>
+
+</html>
