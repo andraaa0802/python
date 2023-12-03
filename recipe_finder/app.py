@@ -4,36 +4,27 @@ import random
 
 app = Flask(__name__)
 
-SPOONACULAR_API_KEY = 'your_spoonacular_api_key_here'
-
-# Define a list of possible random search terms
-RANDOM_SEARCH_TERMS = ["pasta", "salad", "soup", "dessert", "vegetarian", "chicken"]
+SPOONACULAR_API_KEY = 'd8167a83add04d1c913b7a6d25f87cc7'
 
 @app.route('/')
 def index():
     return render_template('index.html')
 
-@app.route('/search', methods=['GET','POST'])
-
+@app.route('/search', methods=['POST'])
 def search_recipes():
     try:
-        if request.method == 'POST':
-            search_query = request.form.get('query')
-            api_url = f'https://api.spoonacular.com/recipes/search?apiKey={SPOONACULAR_API_KEY}&query={search_query}'
+        search_query = request.form.get('query')
+        api_url = f'https://api.spoonacular.com/recipes/search?apiKey={SPOONACULAR_API_KEY}&query={search_query}'
 
-            response = requests.get(api_url)
-            response.raise_for_status()
-            data = response.json()
+        response = requests.get(api_url)
+        response.raise_for_status()
+        data = response.json()
 
-            if response.status_code == 200:
-                recipes = data.get('results', [])
-                return render_template('results.html', recipes=recipes)
-            else:
-                return render_template('error.html', error=data.get('message', 'Unknown error'))
-
-        elif request.method == 'GET':
-            # Handle the GET request for the /search route if needed
-            return render_template('index.html')
+        if response.status_code == 200:
+            recipes = data.get('results', [])
+            return render_template('results.html', recipes=recipes,search_term=search_query)
+        else:
+            return render_template('error.html', error=data.get('message', 'Unknown error'))
 
     except requests.exceptions.RequestException as e:
         app.logger.error(f'Error during recipe search: {e}')
@@ -57,20 +48,28 @@ def recipe_details(recipe_id):
         app.logger.error(f'Error retrieving recipe details: {e}')
         return render_template('error.html', error='An error occurred while retrieving recipe details.')
 
-@app.route('/feeling_lucky', methods=['GET'])
+@app.route('/feeling_lucky', methods=[ 'POST'])
 def feeling_lucky():
     try:
-        # List of possible search terms
-        possible_search_terms = ['chicken', 'pasta', 'vegetarian', 'dessert', 'soup']
+        predefined_queries = ["Pasta", "Chicken", "Salad", "Dessert", "Vegetarian", "Brownie", "Pizza", "Christmas", "Egg", "Chocolate", "Cheese", "Olive"]
 
-        # Generate a random search term
-        random_search_term = random.choice(possible_search_terms)
+        random_query = random.choice(predefined_queries)
 
-        # Redirect to the search route with the random search term
-        return redirect(url_for('search_recipes', query=random_search_term))
+        api_url = f'https://api.spoonacular.com/recipes/search?apiKey={SPOONACULAR_API_KEY}&query={random_query}'
 
-    except Exception as e:
-        app.logger.error(f'Error during "I\'m Feeling Lucky" operation: {e}')
+        response = requests.get(api_url)
+        response.raise_for_status()
+        data = response.json()
+
+        if response.status_code == 200:
+            recipes = data.get('results', [])
+            return render_template('results.html', recipes=recipes, search_term=random_query)
+        else:
+            return render_template('error.html', error=data.get('message', 'Unknown error'))
+
+    except requests.exceptions.RequestException as e:
+        app.logger.error(f'Error during lucky recipe retrieval: {e}')
         return render_template('error.html', error='An error occurred while processing your request.')
+
 if __name__ == '__main__':
     app.run(debug=True)

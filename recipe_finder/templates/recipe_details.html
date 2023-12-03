@@ -64,10 +64,9 @@
 
         {% if recipe.instructions %}
         <p><strong>Instructions:</strong></p>
-        <p>{{ recipe.instructions }}</p>
+        <p>{{ recipe.instructions | safe }}</p>
         {% endif %}
 
-        <p><strong>Preparation Time:</strong> {{ recipe.preparation_time }} minutes</p>
         <p><strong>Servings:</strong> {{ recipe.servings }}</p>
     </div>
 
