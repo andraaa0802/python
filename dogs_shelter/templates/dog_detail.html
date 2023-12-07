@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ dog.name }} - Detaliile cainelui</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        img {
+            width: 100%; 
+            max-width: 300px; 
+            height: auto;
+            margin: 20px auto; 
+            display: block;
+        }
+
+        p {
+            font-size: 18px; 
+            margin-bottom: 15px;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+    <h2>{{ dog.name }}</h2>
+    <img src="{{ url_for('static', filename=dog.photo_path) }}" alt="{{ dog.name }}">
+    <p><strong>Rasa:</strong> {{ dog.breed }}</p>
+    <p><strong>Varsta:</strong> {{ dog.age }}</p>
+    <p><strong>Descriere:</strong> {{ dog.description }}</p>
+    <a href="{{ url_for('adopt', dog_id=dog.id) }}">Adopta-ma!</a>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Adopta un caine</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+
+        h2 {
+            text-align: center;
+        }
+
+        p {
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        button[disabled] {
+            background-color: #ccc;
+            cursor: not-allowed;
+        }
+    </style>
+</head>
+
+<body>
+    <h2>Adoptie {{ dog.name }}</h2>
+    <form method="post" action="{{ url_for('adopt', dog_id=dog.id) }}">
+        <p>Sunteti sigur ca vreti sa il/o adoptati pe {{ dog.name }}?</p>
+        {% if dog.availability %}
+        <button type="submit">Da, vreau sa adopt!</button>
+        {% else %}
+        <button disabled>Nu mai este disponibil!</button>
+        {% endif %}
+    </form>
+</body>
+
+</html>
